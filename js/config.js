@@ -1,0 +1,22 @@
+/**
+ * Map and basemap configuration. Style URLs only; no basemap overrides in code.
+ */
+// Token: set MAPBOX_ACCESS_TOKEN in Vercel, or replace REPLACE_MAPBOX_TOKEN in this file for local/dev
+mapboxgl.accessToken = 'REPLACE_MAPBOX_TOKEN';
+
+/** Basemap style URLs (Mapbox Studio). */
+const BASEMAP_STYLES = [
+    { title: 'Light', uri: 'mapbox://styles/wali521/cmlujwwhz003h01s9c2wd11n9' },
+    { title: 'Dark', uri: 'mapbox://styles/wali521/cmluky4bp003f01saceol0z8w' }
+];
+
+/** Initial style URL (your Mapbox Studio base map). Default: Dark. */
+const INITIAL_STYLE_URI = BASEMAP_STYLES[1].uri;
+
+/** Default map options (center, zoom, etc.). Centered on Taipei for the 4 road markers. */
+const MAP_OPTIONS = {
+    center: [121.525, 25.017],
+    zoom: 11,
+    pitch: 0,
+    bearing: 0
+};

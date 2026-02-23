@@ -1,0 +1,13 @@
+{
+  "name": "mapbox-design",
+  "version": "1.0.0",
+  "description": "Forterra branded Mapbox GL map — static site, no build. Deploy to Vercel or any static host.",
+  "private": true,
+  "scripts": {
+    "build": "node -e \"const fs=require('fs');const p=require('path');const f=p.join(process.cwd(),'js/config.js');let c=fs.readFileSync(f,'utf8');const t=process.env.MAPBOX_ACCESS_TOKEN||'REPLACE_MAPBOX_TOKEN';c=c.replace(/REPLACE_MAPBOX_TOKEN/g,t);fs.writeFileSync(f,c);\"",
+    "test": "echo \"No tests\" && exit 0"
+  },
+  "keywords": ["mapbox", "forterra", "map"],
+  "author": "",
+  "license": "ISC"
+}

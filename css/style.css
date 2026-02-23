@@ -1,0 +1,521 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: hidden;
+    min-height: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#map {
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.mapboxgl-popup-content {
+    font-family: 'Inter', sans-serif;
+    padding: 12px 16px;
+    background: #292e29;
+    color: #edebeb;
+    border-radius: 4px;
+}
+
+.mapboxgl-popup-content h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: #758273;
+}
+
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+    border-top-color: #292e29;
+}
+
+.mapboxgl-ctrl-layers {
+    background: #3a403a;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    width: 200px;
+    min-width: 200px;
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: all 0.3s ease;
+}
+
+.mapboxgl-ctrl-layers:not(.expanded) {
+    width: 200px;
+    min-width: 200px;
+}
+
+.mapboxgl-ctrl-layers-header {
+    padding: 12px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #a8b8a8;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.mapboxgl-ctrl-layers-header span {
+    flex: 1;
+}
+
+.mapboxgl-ctrl-layers-toggle {
+    background: none;
+    border: none;
+    color: #a8b8a8;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.mapboxgl-ctrl-layers-toggle:hover {
+    color: #e0e6dc;
+}
+
+.mapboxgl-ctrl-layers.expanded .mapboxgl-ctrl-layers-toggle {
+    transform: rotate(90deg);
+}
+
+.mapboxgl-ctrl-layers-list {
+    padding: 8px 0;
+    margin: 0;
+    list-style: none;
+}
+
+.mapboxgl-ctrl-layers-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #e0e6dc;
+    transition: background 0.2s;
+}
+
+.mapboxgl-ctrl-layers-item:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.mapboxgl-ctrl-layers-item input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: #758273;
+}
+
+.mapboxgl-ctrl-layers-item label {
+    cursor: pointer;
+    user-select: none;
+    flex: 1;
+}
+
+/* Right-click context menu: Zoom to layer */
+.mapboxgl-ctrl-layers-contextmenu {
+    position: fixed;
+    z-index: 10000;
+    background: #3a403a;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    padding: 4px 0;
+    min-width: 140px;
+}
+
+.mapboxgl-ctrl-layers-zoom {
+    display: block;
+    width: 100%;
+    padding: 8px 14px;
+    border: none;
+    background: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #e0e6dc;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.mapboxgl-ctrl-layers-zoom:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+/* Leaflet-style Layer Control */
+.leaflet-control-layers {
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    background: #fff;
+    border-radius: 5px;
+    position: relative;
+}
+
+.leaflet-control-layers-toggle {
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>');
+    background-size: 20px 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: block;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.leaflet-control-layers-toggle:hover {
+    background-color: #f4f4f4;
+}
+
+.leaflet-control-layers-collapsed .leaflet-control-layers-list {
+    display: none;
+}
+
+.leaflet-control-layers-list {
+    padding: 6px 0;
+    margin: 0;
+}
+
+.leaflet-control-layers-base,
+.leaflet-control-layers-overlays {
+    padding: 0;
+}
+
+.leaflet-control-layers-base label,
+.leaflet-control-layers-overlays label {
+    display: block;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 20px;
+    margin: 0;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.leaflet-control-layers-base label:hover,
+.leaflet-control-layers-overlays label:hover {
+    background-color: #f4f4f4;
+}
+
+.leaflet-control-layers-selector {
+    margin-right: 8px;
+    margin-top: 2px;
+    position: relative;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.leaflet-control-layers-separator {
+    height: 0;
+    border-top: 1px solid #ddd;
+    margin: 5px 0;
+}
+
+/* Basemap Toggle (Style) – same width as Layers, better contrast on dark basemap */
+.basemap-toggle-ctrl {
+    background: #3a403a;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    width: 200px;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 8px 10px;
+}
+
+.basemap-toggle-label {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: #a8b8a8;
+    margin-bottom: 6px;
+}
+
+.basemap-toggle-ctrl .basemap-btn {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    margin-bottom: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    background: #454d45;
+    color: #e0e6dc;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.basemap-toggle-ctrl .basemap-btn:last-child {
+    margin-bottom: 0;
+}
+
+.basemap-toggle-ctrl .basemap-btn:hover {
+    background: #505850;
+    color: #fff;
+}
+
+.basemap-toggle-ctrl .basemap-btn.active {
+    background: #758273;
+    color: #fff;
+    border-color: #758273;
+}
+
+/* Elevation mesh: separate toggle (off by default) */
+.mesh-toggle-ctrl {
+    background: #3a403a;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    width: 200px;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 8px 10px;
+}
+
+.mesh-toggle-label {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: #a8b8a8;
+    margin-bottom: 6px;
+}
+
+.mesh-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #e0e6dc;
+}
+
+.mesh-toggle-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #758273;
+    cursor: pointer;
+}
+
+/* On-screen notes when elevation mesh is on */
+.elevation-mesh-notes {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+    max-width: 320px;
+    background: #292e29;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    padding: 12px 14px 10px;
+    font-family: 'Inter', sans-serif;
+    color: #edebeb;
+}
+
+.elevation-mesh-notes-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #758273;
+    margin-bottom: 8px;
+}
+
+.elevation-mesh-notes-list {
+    margin: 0 0 8px 0;
+    padding-left: 18px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #e0e6dc;
+}
+
+.elevation-mesh-notes-list li {
+    margin-bottom: 4px;
+}
+
+.elevation-mesh-notes-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: #a8b8a8;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.2s, color 0.2s;
+}
+
+.elevation-mesh-notes-close:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+/* Mapbox controls container: stack on small screens */
+.mapboxgl-ctrl-top-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: calc(100vw - 24px);
+}
+
+/* Responsive: tablets and small laptops */
+@media (max-width: 768px) {
+    .mapboxgl-ctrl-layers,
+    .mapboxgl-ctrl-layers:not(.expanded),
+    .basemap-toggle-ctrl,
+    .mesh-toggle-ctrl {
+        width: 180px;
+        min-width: 160px;
+    }
+
+    .mapboxgl-ctrl-layers-header,
+    .mapboxgl-ctrl-layers-item {
+        padding: 8px 12px;
+    }
+
+    .mapboxgl-ctrl-layers-item {
+        font-size: 13px;
+    }
+
+    .basemap-toggle-ctrl .basemap-btn,
+    .mesh-toggle-wrap {
+        font-size: 12px;
+    }
+
+    .mapboxgl-popup-content {
+        padding: 10px 12px;
+        max-width: 260px;
+    }
+
+    .mapboxgl-popup-content h3 {
+        font-size: 14px;
+    }
+
+    .elevation-mesh-notes {
+        left: 10px;
+        bottom: 10px;
+        max-width: calc(100vw - 24px);
+        padding: 10px 12px 8px;
+    }
+
+    .elevation-mesh-notes-title {
+        font-size: 13px;
+    }
+
+    .elevation-mesh-notes-list {
+        font-size: 12px;
+        padding-left: 16px;
+    }
+
+    .elevation-mesh-notes-close {
+        top: 6px;
+        right: 6px;
+        width: 26px;
+        height: 26px;
+        font-size: 16px;
+    }
+}
+
+/* Responsive: phones */
+@media (max-width: 480px) {
+    .mapboxgl-ctrl-top-left {
+        gap: 6px;
+    }
+
+    .mapboxgl-ctrl-layers,
+    .mapboxgl-ctrl-layers:not(.expanded),
+    .basemap-toggle-ctrl,
+    .mesh-toggle-ctrl {
+        width: 100%;
+        min-width: 0;
+        max-width: 200px;
+    }
+
+    .mapboxgl-ctrl-layers-header {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .mapboxgl-ctrl-layers-item {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .mapboxgl-ctrl-layers-item input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .basemap-toggle-ctrl,
+    .mesh-toggle-ctrl {
+        padding: 6px 8px;
+    }
+
+    .basemap-toggle-label,
+    .mesh-toggle-label {
+        font-size: 11px;
+    }
+
+    .basemap-toggle-ctrl .basemap-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .mapboxgl-popup-content {
+        padding: 8px 10px;
+        max-width: 220px;
+        font-size: 13px;
+    }
+
+    .mapboxgl-popup-content h3 {
+        font-size: 13px;
+    }
+
+    .elevation-mesh-notes {
+        left: 8px;
+        bottom: 8px;
+        right: 8px;
+        max-width: none;
+        padding: 10px 36px 8px 10px;
+    }
+
+    .elevation-mesh-notes-list li {
+        margin-bottom: 2px;
+    }
+
+    /* Touch-friendly context menu */
+    .mapboxgl-ctrl-layers-zoom {
+        padding: 10px 14px;
+        min-height: 44px;
+    }
+}
+

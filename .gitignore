@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment (Mapbox token can be set here for production)
+.env
+.env.local
+.env.*.local
+
+# OS and editors
+.DS_Store
+Thumbs.db
+*.log
+
+# Cursor / IDE (optional – remove if you want these in repo)
+.cursor/
+mcps/
+agent-transcripts/
+
+# Build / output (if you add a build step later)
+dist/
+build/
+*.local

@@ -1,0 +1,26 @@
+{
+  "type": "FeatureCollection",
+  "name": "Signal_Poles",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Pole 1", "type": "transmission" },
+      "geometry": { "type": "Point", "coordinates": [121.515, 25.068] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Pole 2", "type": "transmission" },
+      "geometry": { "type": "Point", "coordinates": [121.535, 25.025] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Pole 3", "type": "transmission" },
+      "geometry": { "type": "Point", "coordinates": [121.555, 24.978] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Pole 4", "type": "transmission" },
+      "geometry": { "type": "Point", "coordinates": [121.505, 24.965] }
+    }
+  ]
+}
