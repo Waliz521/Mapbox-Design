@@ -191,23 +191,38 @@ function addLayerControl(map) {
         var id = resolveLayerId(map, def);
         return id ? { id: id, name: def.name, visible: def.visible !== false, dataUrl: def.dataUrl } : null;
     }).filter(Boolean);
-    if (typeof console !== 'undefined' && console.log) {
-        console.log('[Mapbox-Design] addLayerControl: resolved layers', resolved.map(function (r) { return r.id + ' (' + r.name + ')'; }));
-    }
     layerControlInstance = new BasicLayerControl(resolved);
     map.addControl(layerControlInstance, 'top-left');
 }
 
-/** Separate toggle for elevation mesh layer (off by default). When turned on, shows on-screen notes. Added only once on initial load; use syncMeshToggleAfterStyleLoad on style.load to fix duplicates and sync state. */
+/** Elevation mesh is only available in dark style; toggle must not be visible in light mode. */
+function isDarkStyle(map) {
+    var s = map && map.getStyle && map.getStyle();
+    return s && s.name === 'FORTERRA_Dark';
+}
+
+/** Remove all elevation-mesh toggle UI from the map container (so it never shows in light mode). */
+function removeMeshToggleFromDOM(map) {
+    if (!map || !map.getContainer) return;
+    var topLeft = map.getContainer().querySelector('.mapboxgl-ctrl-top-left');
+    if (!topLeft) return;
+    var panels = topLeft.querySelectorAll('.mesh-toggle-ctrl');
+    for (var i = 0; i < panels.length; i++) {
+        var p = panels[i].parentNode;
+        if (p) p.removeChild(panels[i]);
+    }
+}
+
+/** Separate toggle for elevation mesh layer (off by default). Only shown in dark mode. When turned on, shows on-screen notes. */
 var meshToggleControlInstance = null;
 
 function addMeshToggleControl(map) {
-    if (!map.getLayer('elevation-mesh')) {
-        if (typeof console !== 'undefined' && console.warn) console.warn('[Mapbox-Design] addMeshToggleControl: elevation-mesh layer not found, skip');
-        return;
+    if (!isDarkStyle(map)) return;
+    if (!map.getLayer('elevation-mesh')) return;
+    if (meshToggleControlInstance) {
+        try { map.removeControl(meshToggleControlInstance); } catch (e) {}
+        meshToggleControlInstance = null;
     }
-    if (meshToggleControlInstance) map.removeControl(meshToggleControlInstance);
-    if (typeof console !== 'undefined' && console.log) console.log('[Mapbox-Design] addMeshToggleControl: adding control');
 
     var container = document.createElement('div');
     container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group mesh-toggle-ctrl';
@@ -231,8 +246,9 @@ function addMeshToggleControl(map) {
     container.appendChild(wrap);
 
     checkbox.addEventListener('change', function () {
+        if (!isDarkStyle(map) || !map.getLayer('elevation-mesh')) return;
         var visible = checkbox.checked ? 'visible' : 'none';
-        map.setLayoutProperty('elevation-mesh', 'visibility', visible);
+        try { map.setLayoutProperty('elevation-mesh', 'visibility', visible); } catch (e) {}
         if (checkbox.checked) {
             if (typeof updateElevationMeshGrid === 'function') updateElevationMeshGrid(map);
             if (typeof window.showElevationMeshNotes === 'function') window.showElevationMeshNotes();
@@ -250,15 +266,12 @@ function addMeshToggleControl(map) {
     map.addControl(meshToggleControlInstance, 'top-left');
 }
 
-/** Call after style.load: remove duplicate mesh toggle panels (orphaned DOM) and sync checkbox to layer visibility. Do not re-add the control. */
+/** Call after style.load: remove duplicate mesh toggle panels and sync checkbox. */
 function syncMeshToggleAfterStyleLoad(map) {
     if (!map || !map.getContainer) return;
     var topLeft = map.getContainer().querySelector('.mapboxgl-ctrl-top-left');
     if (!topLeft) return;
     var meshPanels = topLeft.querySelectorAll('.mesh-toggle-ctrl');
-    if (meshPanels.length > 1 && typeof console !== 'undefined' && console.log) {
-        console.log('[Mapbox-Design] syncMeshToggleAfterStyleLoad: removing duplicate mesh toggles', { count: meshPanels.length, removing: meshPanels.length - 1 });
-    }
     for (var i = 1; i < meshPanels.length; i++) {
         var p = meshPanels[i].parentNode;
         if (p) p.removeChild(meshPanels[i]);
@@ -266,9 +279,25 @@ function syncMeshToggleAfterStyleLoad(map) {
     var first = topLeft.querySelector('.mesh-toggle-ctrl');
     if (first) {
         var cb = first.querySelector('input.mesh-toggle-checkbox');
-        if (cb) {
-            cb.checked = false;
-        }
+        if (cb) cb.checked = false;
     }
     if (typeof window.hideElevationMeshNotes === 'function') window.hideElevationMeshNotes();
+}
+
+/** Call after style.load: show elevation mesh toggle only in dark mode; remove it completely in light mode. */
+function updateMeshToggleForStyle(map) {
+    if (isDarkStyle(map)) {
+        if (map.getLayer('elevation-mesh') && typeof addMeshToggleControl === 'function') addMeshToggleControl(map);
+        if (typeof syncMeshToggleAfterStyleLoad === 'function') syncMeshToggleAfterStyleLoad(map);
+    } else {
+        if (typeof window.hideElevationMeshNotes === 'function') window.hideElevationMeshNotes();
+        if (meshToggleControlInstance) {
+            try { map.removeControl(meshToggleControlInstance); } catch (e) {}
+            meshToggleControlInstance = null;
+        }
+        removeMeshToggleFromDOM(map);
+        if (map.getLayer('elevation-mesh')) {
+            try { map.setLayoutProperty('elevation-mesh', 'visibility', 'none'); } catch (e) {}
+        }
+    }
 }

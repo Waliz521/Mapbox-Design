@@ -6,6 +6,9 @@ node_modules/
 .env.local
 .env.*.local
 
+# Local token override (copy config.local.example.js to config.local.js)
+js/config.local.js
+
 # OS and editors
 .DS_Store
 Thumbs.db

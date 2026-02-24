@@ -109,19 +109,10 @@ function updateElevationMeshGrid(map) {
     }
 
     source.setData({ type: 'FeatureCollection', features: features });
-
-    if (ELEVATION_MESH_DEBUG && typeof console !== 'undefined' && console.log) {
-        var zoom = typeof map.getZoom === 'function' ? map.getZoom() : 0;
-        console.log('[elevation-mesh] pitch=' + Math.round(pitch) + '° zoom=' + zoom.toFixed(1) + ' grid=' + n + ' total=' + features.length + ' nullElev=' + nullCount + ' fallback=' + fallbackElev.toFixed(0) + 'm visible(≥600m)=' + visibleCount);
-    }
 }
 
 function addElevationMesh(map) {
-    if (map.getSource(ELEVATION_MESH_SOURCE_ID)) {
-        if (typeof console !== 'undefined' && console.log) console.log('[Mapbox-Design] elevationMesh: source already exists, skip');
-        return;
-    }
-    if (typeof console !== 'undefined' && console.log) console.log('[Mapbox-Design] elevationMesh: adding source and layer');
+    if (map.getSource(ELEVATION_MESH_SOURCE_ID)) return;
     ensureTerrainForMesh(map);
 
     map.addSource(ELEVATION_MESH_SOURCE_ID, {

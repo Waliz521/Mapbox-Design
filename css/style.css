@@ -1,3 +1,14 @@
+/* Base typography tokens for UI (kept neutral so basemap typography comes only from Mapbox styles). */
+:root {
+    --font-heading: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --type-x: 1rem;      /* 16px base */
+    --type-1-5x: 1.5rem; /* 24px */
+    --type-2x: 2rem;     /* 32px */
+    --type-3x: 3rem;     /* 48px */
+    --type-4x: 4rem;     /* 64px */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -9,7 +20,9 @@ html {
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: var(--font-body);
+    font-size: var(--type-x);
+    font-weight: 400;
     overflow: hidden;
     min-height: 100%;
     -webkit-tap-highlight-color: transparent;
@@ -22,8 +35,11 @@ body {
     min-height: 100dvh;
 }
 
+/* Typography hierarchy: H3 = panel/popup title, H4/H5 = labels, Body = list/popup text */
 .mapboxgl-popup-content {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
+    font-size: var(--type-x);
+    font-weight: 400;
     padding: 12px 16px;
     background: #292e29;
     color: #edebeb;
@@ -31,9 +47,9 @@ body {
 }
 
 .mapboxgl-popup-content h3 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 16px;
+    font-size: var(--type-1-5x);
     margin-bottom: 4px;
     color: #758273;
 }
@@ -59,9 +75,9 @@ body {
 
 .mapboxgl-ctrl-layers-header {
     padding: 12px 16px;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 14px;
+    font-size: clamp(0.875rem, var(--type-1-5x), 1.25rem);
     color: #a8b8a8;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     display: flex;
@@ -108,8 +124,9 @@ body {
     align-items: center;
     padding: 10px 16px;
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    font-family: var(--font-body);
+    font-size: var(--type-x);
+    font-weight: 400;
     color: #e0e6dc;
     transition: background 0.2s;
 }
@@ -150,8 +167,9 @@ body {
     padding: 8px 14px;
     border: none;
     background: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    font-family: var(--font-body);
+    font-size: var(--type-x);
+    font-weight: 400;
     color: #e0e6dc;
     text-align: left;
     cursor: pointer;
@@ -245,9 +263,9 @@ body {
 
 .basemap-toggle-label {
     display: block;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 12px;
+    font-size: clamp(0.875rem, var(--type-1-5x), 1.25rem);
     color: #a8b8a8;
     margin-bottom: 6px;
 }
@@ -257,8 +275,9 @@ body {
     width: 100%;
     padding: 6px 12px;
     margin-bottom: 4px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    font-family: var(--font-body);
+    font-size: var(--type-x);
+    font-weight: 700;
     border: 1px solid rgba(255,255,255,0.15);
     border-radius: 4px;
     background: #454d45;
@@ -294,9 +313,9 @@ body {
 
 .mesh-toggle-label {
     display: block;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 12px;
+    font-size: clamp(0.875rem, var(--type-1-5x), 1.25rem);
     color: #a8b8a8;
     margin-bottom: 6px;
 }
@@ -306,8 +325,9 @@ body {
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    font-family: var(--font-body);
+    font-size: var(--type-x);
+    font-weight: 700;
     color: #e0e6dc;
 }
 
@@ -330,14 +350,16 @@ body {
     border-radius: 6px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     padding: 12px 14px 10px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
+    font-size: var(--type-x);
+    font-weight: 400;
     color: #edebeb;
 }
 
 .elevation-mesh-notes-title {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 14px;
+    font-size: var(--type-1-5x);
     color: #758273;
     margin-bottom: 8px;
 }
@@ -345,7 +367,7 @@ body {
 .elevation-mesh-notes-list {
     margin: 0 0 8px 0;
     padding-left: 18px;
-    font-size: 13px;
+    font-size: var(--type-x);
     line-height: 1.45;
     color: #e0e6dc;
 }

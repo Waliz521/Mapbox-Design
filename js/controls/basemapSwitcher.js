@@ -23,7 +23,6 @@ function initBasemapSwitcher(map) {
         btn.addEventListener('click', function () {
             var uri = btn.dataset.uri;
             if (!uri) return;
-            if (typeof console !== 'undefined' && console.log) console.log('[Mapbox-Design] basemapSwitcher: setStyle', uri);
             map.setStyle(uri);
             buttons.forEach(function (b) { b.classList.remove('active'); });
             btn.classList.add('active');

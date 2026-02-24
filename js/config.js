@@ -1,7 +1,8 @@
 /**
  * Map and basemap configuration. Style URLs only; no basemap overrides in code.
  */
-// Token: set MAPBOX_ACCESS_TOKEN in Vercel, or replace REPLACE_MAPBOX_TOKEN in this file for local/dev
+// Token: Vercel injects MAPBOX_ACCESS_TOKEN at build. For local dev, copy js/config.local.example.js to js/config.local.js and add your token.
+// Get a token at https://account.mapbox.com/ — without a valid token you'll see CORS / "Failed to fetch" errors.
 mapboxgl.accessToken = 'REPLACE_MAPBOX_TOKEN';
 
 /** Basemap style URLs (Mapbox Studio). */
@@ -16,7 +17,7 @@ const INITIAL_STYLE_URI = BASEMAP_STYLES[1].uri;
 /** Default map options (center, zoom, etc.). Centered on Taipei for the 4 road markers. */
 const MAP_OPTIONS = {
     center: [121.525, 25.017],
-    zoom: 11,
+    zoom: 8,
     pitch: 0,
     bearing: 0
 };

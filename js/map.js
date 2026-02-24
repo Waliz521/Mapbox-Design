@@ -1,24 +1,9 @@
 /**
  * Map init and basemap switching. Loads style by fetch, strips terrain to avoid mapbox-dem errors, then creates the map.
  */
-var LOG = function (msg, data) {
-    if (typeof console !== 'undefined' && console.log) {
-        if (data !== undefined) console.log('[Mapbox-Design]', msg, data);
-        else console.log('[Mapbox-Design]', msg);
-    }
-};
-var LOG_WARN = function (msg, data) {
-    if (typeof console !== 'undefined' && console.warn) {
-        if (data !== undefined) console.warn('[Mapbox-Design]', msg, data);
-        else console.warn('[Mapbox-Design]', msg);
-    }
-};
-var LOG_ERROR = function (msg, err) {
-    if (typeof console !== 'undefined' && console.error) {
-        if (err !== undefined) console.error('[Mapbox-Design]', msg, err);
-        else console.error('[Mapbox-Design]', msg);
-    }
-};
+var LOG = function () {};
+var LOG_WARN = function () {};
+var LOG_ERROR = function () {};
 
 var initialStyleUri = typeof INITIAL_STYLE_URI !== 'undefined' ? INITIAL_STYLE_URI : (BASEMAP_STYLES && BASEMAP_STYLES[0] ? BASEMAP_STYLES[0].uri : null);
 
@@ -28,17 +13,14 @@ function fetchStyleJson(styleUrl) {
         var path = styleUrl.replace('mapbox://styles/', '');
         url = 'https://api.mapbox.com/styles/v1/' + path + '?access_token=' + (mapboxgl.accessToken || '');
     }
-    LOG('fetchStyleJson', styleUrl);
     return fetch(url).then(function (r) {
         if (!r.ok) {
-            LOG_ERROR('fetchStyleJson failed', { status: r.status, statusText: r.statusText, url: styleUrl });
             var err = new Error('Style fetch failed: ' + r.status + ' ' + r.statusText);
             err.status = r.status;
             throw err;
         }
         return r.json();
     }).then(function (style) {
-        LOG('fetchStyleJson ok', { styleName: style && style.name, sources: style && style.sources && Object.keys(style.sources).length });
         return style;
     });
 }
@@ -84,14 +66,11 @@ function removeDeprecatedSourcesFromMap(map) {
             sourceIdsToRemove.push(id);
         }
     });
-    if (sourceIdsToRemove.length > 0 && typeof LOG !== 'undefined') {
-        LOG('removeDeprecatedSourcesFromMap: removing', { sourceIds: sourceIdsToRemove });
-    }
     sourceIdsToRemove.forEach(function (sourceId) {
         style.layers.filter(function (ly) { return ly.source === sourceId; }).forEach(function (ly) {
-            try { map.removeLayer(ly.id); } catch (e) { if (typeof LOG_ERROR === 'function') LOG_ERROR('removeDeprecatedSourcesFromMap: removeLayer failed', { layerId: ly.id, err: e }); }
+            try { map.removeLayer(ly.id); } catch (e) {}
         });
-        try { map.removeSource(sourceId); } catch (e) { if (typeof LOG_ERROR === 'function') LOG_ERROR('removeDeprecatedSourcesFromMap: removeSource failed', { sourceId: sourceId, err: e }); }
+        try { map.removeSource(sourceId); } catch (e) {}
     });
 }
 
@@ -108,8 +87,6 @@ function stripDeprecatedSources(style) {
         }
     });
     if (Object.keys(sourceIdsToRemove).length === 0) return;
-    var removedLayers = style.layers.filter(function (ly) { return ly.source && sourceIdsToRemove[ly.source]; }).map(function (ly) { return ly.id; });
-    LOG('stripDeprecatedSources: removing sources and layers', { sources: Object.keys(sourceIdsToRemove), layers: removedLayers });
     style.layers = style.layers.filter(function (ly) {
         if (ly.source && sourceIdsToRemove[ly.source]) return false;
         return true;
@@ -122,16 +99,11 @@ function stripDeprecatedSources(style) {
  * Call this from main.js so the style never references mapbox-dem.
  */
 function initMapboxMap(onLoad) {
-    if (!initialStyleUri) {
-        console.warn('Mapbox Design: no INITIAL_STYLE_URI, map not initialized.');
-        return;
-    }
-    LOG('initMapboxMap: loading initial style', initialStyleUri);
+    if (!initialStyleUri) return;
     fetchStyleJson(initialStyleUri).then(function (style) {
         stripTerrain(style);
         disableLandmarkImportConfig(style);
         stripDeprecatedSources(style);
-        LOG('initMapboxMap: creating map', { styleName: style && style.name });
         // Keep style layers (Power-poles, Roads, Port, etc.) when published from Studio; overlays.js adds only missing ones
         var map = new mapboxgl.Map({
             container: 'map',
@@ -147,7 +119,6 @@ function initMapboxMap(onLoad) {
         map.setStyle = function (styleArg, options) {
             var opts = options || {};
             opts.diff = opts.diff !== undefined ? opts.diff : false;
-            LOG('setStyle called', typeof styleArg === 'string' ? styleArg : (styleArg && styleArg.name ? styleArg.name : 'object'));
             if (typeof styleArg === 'string') {
                 return fetchStyleJson(styleArg).then(function (s) {
                     stripTerrain(s);
@@ -155,7 +126,6 @@ function initMapboxMap(onLoad) {
                     stripDeprecatedSources(s);
                     return originalSetStyle(s, opts);
                 }).catch(function (err) {
-                    LOG_ERROR('setStyle failed', err);
                     throw err;
                 });
             }
@@ -166,7 +136,6 @@ function initMapboxMap(onLoad) {
         };
 
         map.on('load', function () {
-            LOG('map.load fired');
             removeDeprecatedSourcesFromMap(map);
             removeHillshadeLayersFromMap(map);
             if (onLoad) onLoad();
@@ -178,7 +147,5 @@ function initMapboxMap(onLoad) {
             window.MapboxDesignLOG_WARN = LOG_WARN;
             window.MapboxDesignLOG_ERROR = LOG_ERROR;
         }
-    }).catch(function (err) {
-        LOG_ERROR('initMapboxMap: failed to load initial style', err);
-    });
+    }).catch(function () {});
 }

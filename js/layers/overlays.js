@@ -140,9 +140,7 @@ function addOverlays(map) {
     function applyFiresPattern(patternImg) {
         try {
             map.addImage(DIRECT_INDIRECT_FIRES_PATTERN_ID, patternImg, { pixelRatio: 2 });
-        } catch (e) {
-            if (typeof console !== 'undefined' && console.warn) console.warn('[Mapbox-Design] overlays: addImage (fires pattern) failed', e);
-        }
+        } catch (e) {}
         if (existingFiresLayerId) {
             map.setPaintProperty(existingFiresLayerId, 'fill-pattern', DIRECT_INDIRECT_FIRES_PATTERN_ID);
             map.setPaintProperty(existingFiresLayerId, 'fill-opacity', 0.26);
@@ -167,8 +165,7 @@ function addOverlays(map) {
 
     createDirectIndirectFiresPatternImage(firesOutline).then(function (patternImg) {
         applyFiresPattern(patternImg);
-    }).catch(function (err) {
-        if (typeof console !== 'undefined' && console.warn) console.warn('[Mapbox-Design] overlays: Direct & Indirect Fires pattern image failed, using solid fill', err);
+    }).catch(function () {
         if (!existingFiresLayerId && !map.getLayer('direct-indirect-fires') && map.getSource('direct-indirect-fires')) {
             map.addLayer({
                 id: 'direct-indirect-fires',
