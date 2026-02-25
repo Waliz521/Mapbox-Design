@@ -1,0 +1,14 @@
+{
+  "type": "FeatureCollection",
+  "name": "Power_poles_label",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "label": "Power poles" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.52, 25.03]
+      }
+    }
+  ]
+}

@@ -401,6 +401,158 @@ body {
     color: #fff;
 }
 
+/* Legend — unified panel (Forterra branding) */
+.forterra-legend-wrapper {
+    background: #3a403a;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 8px 12px;
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+.forterra-legend-header {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #a8b8a8;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.forterra-legend-section {
+    margin-bottom: 8px;
+}
+
+.forterra-legend-section summary {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: #a8b8a8;
+    cursor: pointer;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.forterra-legend-overlays {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 4px;
+}
+
+.forterra-legend-overlay-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: #e0e6dc;
+}
+
+.forterra-legend-swatch {
+    flex-shrink: 0;
+}
+
+.forterra-legend-swatch--line {
+    width: 20px;
+    height: 3px;
+    border-radius: 1px;
+}
+
+.forterra-legend-swatch--fill {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 2px solid;
+}
+
+.forterra-legend-swatch--circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+/* Legend (mapboxgl-legend) — Forterra branding */
+.mapboxgl-ctrl-legend {
+    --map-legend-background: #3a403a;
+    --map-legend-border: 1px solid rgba(255,255,255,0.12);
+    --map-legend-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    --map-legend-title-color: #a8b8a8;
+    --map-legend-label-color: #e0e6dc;
+    --map-legend-font: 1rem / 1.4 var(--font-body), sans-serif;
+    --map-legend-title-size: 0.75rem;
+    --map-legend-label-size: 0.7rem;
+    --map-legend-bubble-stroke: rgba(255,255,255,0.2);
+    --map-legend-bubble-background: #454d45;
+    --map-legend-minimizer-hover-color: #505850;
+}
+
+.mapboxgl-ctrl-legend .panes {
+    background: #3a403a;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.mapboxgl-ctrl-legend details + details {
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+.mapboxgl-ctrl-legend summary {
+    color: #a8b8a8;
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+/* Ensure Mapbox attribution appears below legend in bottom-right */
+.mapboxgl-ctrl-bottom-right {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+}
+
+.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-attrib {
+    margin-top: 4px;
+}
+
+/* Vehicle markers (inside unified legend) */
+.forterra-legend-vehicles {
+    padding: 4px 0 0 4px;
+}
+
+.forterra-legend-vehicles-header {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: #a8b8a8;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.forterra-legend-vehicles-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.forterra-legend-vehicles-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: #e0e6dc;
+}
+
+.forterra-legend-vehicle-icon {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+}
+
 /* Mapbox controls container: stack on small screens */
 .mapboxgl-ctrl-top-left {
     display: flex;

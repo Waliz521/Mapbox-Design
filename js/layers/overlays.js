@@ -2,7 +2,7 @@
  * GeoJSON overlay layers: roads, port, main operating base, combat outpost, direct & indirect fires.
  * When the basemap style (e.g. FORTERRA_Dark) already includes these layers from Mapbox Studio,
  * we use those; otherwise we add sources/layers from local GeoJSON. No custom popups.
- * Hex values: see js/colors.js and FORTERRA_COLORS.md.
+ * Hex values: see js/colors.js and README.md.
  *
  * Direct & Indirect Fires (client inspiration from refs):
  * - Tactical CONOPS: semi-transparent red polygons for engagement/danger zones; optional explosion graphics.
@@ -64,7 +64,8 @@ function addOverlays(map) {
             paint: {
                 'line-color': c.overlays.roads,
                 'line-width': ['interpolate', ['linear'], ['zoom'], 8, 1, 12, 2, 15, 3]
-            }
+            },
+            metadata: { name: 'Roads' }
         });
     }
 
@@ -83,7 +84,8 @@ function addOverlays(map) {
                 'fill-color': c.overlays.port.fill,
                 'fill-opacity': 0.6,
                 'fill-outline-color': c.overlays.port.outline
-            }
+            },
+            metadata: { name: 'Port' }
         });
     }
 
@@ -102,7 +104,8 @@ function addOverlays(map) {
                 'fill-color': c.overlays.mainOperatingBase.fill,
                 'fill-opacity': 0.7,
                 'fill-outline-color': c.overlays.mainOperatingBase.outline
-            }
+            },
+            metadata: { name: 'Main Operating Base' }
         });
     }
 
@@ -121,7 +124,8 @@ function addOverlays(map) {
                 'fill-color': c.overlays.combatOutpost.fill,
                 'fill-opacity': 0.7,
                 'fill-outline-color': c.overlays.combatOutpost.outline
-            }
+            },
+            metadata: { name: 'Combat Outpost' }
         });
     }
 
@@ -157,7 +161,8 @@ function addOverlays(map) {
                     'fill-opacity': 0.26,
                     'fill-pattern': DIRECT_INDIRECT_FIRES_PATTERN_ID,
                     'fill-outline-color': firesOutline
-                }
+                },
+                metadata: { name: 'Direct & Indirect Fires' }
             });
             if (typeof addLayerControl === 'function') addLayerControl(map);
         }
@@ -176,7 +181,8 @@ function addOverlays(map) {
                     'fill-color': firesFill,
                     'fill-opacity': 0.24,
                     'fill-outline-color': firesOutline
-                }
+                },
+                metadata: { name: 'Direct & Indirect Fires' }
             });
             if (typeof addLayerControl === 'function') addLayerControl(map);
         }
@@ -198,7 +204,44 @@ function addOverlays(map) {
                 'circle-opacity': 0,
                 'circle-color': '#ffff00',
                 'circle-stroke-width': 0
-            }
+            },
+            metadata: { name: 'Power poles' }
+        });
+    }
+
+    // Waypoint route – line connecting marker waypoints (from MARKER_DEFINITIONS). Styled like roads, uses accent color to distinguish.
+    addWaypointRoute(map);
+}
+
+/** Adds a route line connecting waypoint markers. Uses roads-style color from brand palette. */
+function addWaypointRoute(map) {
+    var defs = typeof MARKER_DEFINITIONS !== 'undefined' ? MARKER_DEFINITIONS : [];
+    if (defs.length < 2) return;
+    var coords = defs.map(function (d) { return d.coords; });
+    var routeGeoJSON = {
+        type: 'Feature',
+        properties: {},
+        geometry: { type: 'LineString', coordinates: coords }
+    };
+    var routeData = { type: 'FeatureCollection', features: [routeGeoJSON] };
+    var lineColor = (typeof FORTERRA_COLORS !== 'undefined' && FORTERRA_COLORS.ui && FORTERRA_COLORS.ui.accent) ? FORTERRA_COLORS.ui.accent : '#758273';
+    if (map.getSource('waypoint-route')) {
+        map.getSource('waypoint-route').setData(routeData);
+    } else {
+        map.addSource('waypoint-route', { type: 'geojson', data: routeData });
+    }
+    if (!map.getLayer('waypoint-route')) {
+        map.addLayer({
+            id: 'waypoint-route',
+            type: 'line',
+            source: 'waypoint-route',
+            layout: { 'visibility': 'visible' },
+            paint: {
+                'line-color': lineColor,
+                'line-width': ['interpolate', ['linear'], ['zoom'], 8, 2, 12, 3, 15, 4],
+                'line-dasharray': [2, 1]
+            },
+            metadata: { name: 'Waypoint route' }
         });
     }
 }

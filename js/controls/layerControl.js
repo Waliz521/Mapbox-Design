@@ -170,6 +170,7 @@ let layerControlInstance = null;
 /** Possible layer ids: style (Mapbox Studio) vs our GeoJSON. First id that exists on the map is used. (Elevation mesh is separate; see addMeshToggleControl.) */
 const LAYER_DEFINITIONS = [
     { ids: ['Roads', 'roads'], name: 'Roads', visible: true, dataUrl: 'data/geojson/Taiwan_Roads.geojson' },
+    { ids: ['waypoint-route'], name: 'Waypoint route', visible: true },
     { ids: ['Port', 'port'], name: 'Port', visible: true, dataUrl: 'data/geojson/Port.geojson' },
     { ids: ['Main-Operating-Base', 'main-operating-base'], name: 'Main Operating Base', visible: true, dataUrl: 'data/geojson/Main_Operating_Base.geojson' },
     { ids: ['Combat-Outpost', 'combat-outpost'], name: 'Combat Outpost', visible: true, dataUrl: 'data/geojson/Combat_Outpost.geojson' },

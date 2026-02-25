@@ -1,5 +1,5 @@
 /**
- * Forterra brand colors (FORTERRA Brand Guidelines). See FORTERRA_COLORS.md.
+ * Forterra brand colors (FORTERRA Brand Guidelines). See README.md.
  * Primary: Dark Forest Green, Light Army Green, Cool Charcoal, Light Gray.
  * Secondary: Bark, Dust, Desert Sand, Light Warm Neutral, Medium Gray.
  */

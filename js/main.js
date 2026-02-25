@@ -1,8 +1,6 @@
 /**
  * Entry point: initializes map with style (terrain stripped), then adds controls, overlays, markers, layer control, and basemap switcher.
  */
-var isInitialLoad = true;
-
 if (typeof window !== 'undefined') {
     window.addEventListener('error', function () {});
     window.addEventListener('unhandledrejection', function () {});
@@ -21,22 +19,25 @@ function addControlsAndOverlays() {
     map.addControl(new mapboxgl.NavigationControl());
     addOverlays(map);
     addMarkers(map);
+    if (typeof addCallouts === 'function') addCallouts(map);
     if (typeof addElevationMesh === 'function') addElevationMesh(map);
     initBasemapSwitcher(map);
     if (typeof updateMeshToggleForStyle === 'function') updateMeshToggleForStyle(map);
     addLayerControl(map);
+    if (typeof addLegendControl === 'function') addLegendControl(map);
 
     map.on('style.load', function () {
         try { map.setTerrain(null); } catch (_) {}
         if (typeof removeDeprecatedSourcesFromMap === 'function') removeDeprecatedSourcesFromMap(map);
         if (typeof removeHillshadeLayersFromMap === 'function') removeHillshadeLayersFromMap(map);
-        if (!isInitialLoad) {
+        map.once('idle', function () {
             addOverlays(map);
             removeMarkersAndReadd(map);
             if (typeof addElevationMesh === 'function') addElevationMesh(map);
             addLayerControl(map);
-        }
+            if (typeof addLegendControl === 'function') addLegendControl(map);
+            if (typeof addCallouts === 'function') addCallouts(map);
+        });
         if (typeof updateMeshToggleForStyle === 'function') updateMeshToggleForStyle(map);
-        isInitialLoad = false;
     });
 }

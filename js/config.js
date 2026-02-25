@@ -14,10 +14,10 @@ const BASEMAP_STYLES = [
 /** Initial style URL (your Mapbox Studio base map). Default: Dark. */
 const INITIAL_STYLE_URI = BASEMAP_STYLES[1].uri;
 
-/** Default map options (center, zoom, etc.). Centered on Taipei for the 4 road markers. */
+/** Default map options (center, zoom, etc.). */
 const MAP_OPTIONS = {
-    center: [121.525, 25.017],
-    zoom: 8,
+    center: [121.51387640265938, 25.04423110324336],
+    zoom: 11,
     pitch: 0,
     bearing: 0
 };

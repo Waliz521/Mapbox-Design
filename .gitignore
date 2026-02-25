@@ -21,5 +21,8 @@ agent-transcripts/
 
 # Build / output (if you add a build step later)
 dist/
+
+# Font docs (duplicate from fonts/Inter)
+README.txt
 build/
 *.local

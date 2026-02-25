@@ -1,5 +1,5 @@
 /**
- * Custom map markers (Port, Direct/Indirect Fires, Main Operating Base, Combat Outpost).
+ * Waypoint markers along roads (Port, Direct/Indirect Fires, Main Operating Base, Combat Outpost icons).
  * Icons: deliverable-assets (pls.svg, jltv_rogue_fires.svg).
  */
 let markerInstances = [];
