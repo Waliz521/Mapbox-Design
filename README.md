@@ -6,23 +6,6 @@ Forterra-branded Mapbox GL JS map for a Taiwan military scenario. Includes Light
 
 ---
 
-## Run locally
-
-1. Copy `js/config.local.example.js` to `js/config.local.js` and add your [Mapbox token](https://account.mapbox.com/).
-2. Run `npm run build` (or `npm run build:legend`) to bundle the map legend.
-3. Open `index.html` in a browser, or serve the folder (e.g. `npx serve .`).
-
-`config.local.js` is gitignored — your token never gets committed.
-
----
-
-## Deploy on Vercel
-
-1. Connect this repo to [Vercel](https://vercel.com).
-2. Add environment variable `MAPBOX_ACCESS_TOKEN` with your [Mapbox](https://account.mapbox.com/) token. The build step injects it into `js/config.js`.
-
----
-
 ## Project structure
 
 | Path | Purpose |
@@ -79,13 +62,11 @@ All colors, typography, and symbology follow **Forterra Brand Guidelines**.
 
 ### 3D building height (Mapbox Studio)
 
-Height bands set in Studio for both themes:
-- 0–3 m (1 story)
-- 3–20 m (low–mid)
-- 20–70 m (mid–high)
-- 70–150+ m (tall)
+Data-driven fill color by `height` (meters), linear interpolation, range 0–1500 m.
 
-Colors use Forterra dark/light tones per theme.
+**FORTERRA_Light** — stops: 0 m (light), 7 m, 21 m, 40 m, 1500 m (dark grey). Gradient from light to dark.
+
+**FORTERRA_Dark** — stops: 0 m, 3 m, 20 m, 70 m, 1500 m. Dark Forterra tones throughout.
 
 ### Label typography (Mapbox Studio)
 
