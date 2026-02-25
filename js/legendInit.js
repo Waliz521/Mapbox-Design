@@ -132,12 +132,22 @@ ForterraLegendControl.prototype.onRemove = function () {
 /**
  * Adds the legend control to the map. Call after overlays are loaded.
  * Re-call after style.load to refresh the legend for Light/Dark basemap.
+ * Removes any existing legend from DOM before adding to prevent duplicates on basemap switch.
  */
 function addLegendControl(map) {
   if (!map) return;
   if (legendControlInstance) {
     try { map.removeControl(legendControlInstance); } catch (e) {}
     legendControlInstance = null;
+  }
+  // Remove any orphaned legend DOM (can happen when Mapbox preserves controls across setStyle)
+  var container = map.getContainer && map.getContainer();
+  if (container) {
+    var existing = container.querySelectorAll('.forterra-legend-wrapper');
+    for (var i = 0; i < existing.length; i++) {
+      var el = existing[i];
+      if (el && el.parentNode) el.parentNode.removeChild(el);
+    }
   }
 
   var control = new ForterraLegendControl();
